@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -45,7 +46,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
         $post = new Post();
         $post->title = $request->title;
@@ -95,7 +96,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
         $post = Post::find($id);
         $post->title = $request->title;
@@ -107,8 +108,8 @@ class PostController extends Controller
             $post->img = $url;
         }
         $post->update();
-        $id = $post->post_id;
-        return redirect()->route('post.show', compact('id'))->with('success', 'Пост успешно отредактирован!');
+        $post = $post->post_id;
+        return redirect()->route('post.show', compact('post'))->with('success', 'Пост успешно отредактирован!');
     }
 
     /**
